@@ -11,9 +11,8 @@ from pathlib import Path
 
 import numpy as np
 
-from ..config.audio_format import CHANNEL_COUNT, FULL_SCALE, SAMPLE_WIDTH_BYTES
-
-LITTLE_ENDIAN_INT16 = "<i2"
+from ..config.audio_format import CHANNEL_COUNT, SAMPLE_WIDTH_BYTES
+from .pcm import to_int16
 
 
 def write_wave(path: Path, stereo: np.ndarray, sample_rate: int) -> None:
@@ -22,7 +21,7 @@ def write_wave(path: Path, stereo: np.ndarray, sample_rate: int) -> None:
     if path.parent and not path.parent.exists():
         path.parent.mkdir(parents=True, exist_ok=True)
 
-    frames = (np.clip(stereo.T, -1.0, 1.0) * FULL_SCALE).astype(LITTLE_ENDIAN_INT16)
+    frames = to_int16(stereo)
     with wave.open(str(path), "wb") as handle:
         handle.setnchannels(CHANNEL_COUNT)
         handle.setsampwidth(SAMPLE_WIDTH_BYTES)
