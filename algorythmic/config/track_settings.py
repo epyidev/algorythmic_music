@@ -10,11 +10,13 @@ même mode, même tempo, même structure.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 
 from ..model.arrangement import DEFAULT_STRUCTURE
+from ..model.layers import LAYER_KEYS
 from ..model.scale import DEFAULT_MODE
+from .layer_settings import LayerSettings
 
 SECONDS_PER_MINUTE = 60.0
 
@@ -34,11 +36,20 @@ MIN_AMOUNT = 0.0
 MAX_AMOUNT = 2.0
 DEFAULT_AMOUNT = 1.0
 
+MIN_BLEND_SECONDS = 0.0
+MAX_BLEND_SECONDS = 4.0
+DEFAULT_BLEND_SECONDS = 0.9
+
 DEFAULT_OUTPUT_NAME = "morceau.wav"
 
 
 def _clamp(value: float, lowest: float, highest: float) -> float:
     return max(lowest, min(highest, value))
+
+
+def default_layers() -> dict[str, LayerSettings]:
+    """Rend une couche neuve par partie instrumentale."""
+    return {key: LayerSettings() for key in LAYER_KEYS}
 
 
 @dataclass(frozen=True)
@@ -54,12 +65,19 @@ class TrackSettings:
     reverb_amount: float = DEFAULT_AMOUNT
     stereo_width: float = DEFAULT_AMOUNT
     timing_looseness: float = DEFAULT_AMOUNT
+    hard_cut_amount: float = DEFAULT_AMOUNT
+    section_blend: float = DEFAULT_BLEND_SECONDS
+    layers: dict[str, LayerSettings] = field(default_factory=default_layers)
     output_path: Path = Path(DEFAULT_OUTPUT_NAME)
 
     @property
     def beat_duration(self) -> float:
         """Durée d'un temps, en secondes."""
         return SECONDS_PER_MINUTE / self.bpm
+
+    def layer(self, key: str) -> LayerSettings:
+        """Rend les réglages d'une couche, ou des réglages neutres à défaut."""
+        return self.layers.get(key, LayerSettings())
 
     def clamped(self) -> "TrackSettings":
         """Rend une copie dont toutes les valeurs numériques sont dans les bornes."""
@@ -72,4 +90,8 @@ class TrackSettings:
             reverb_amount=_clamp(self.reverb_amount, MIN_AMOUNT, MAX_AMOUNT),
             stereo_width=_clamp(self.stereo_width, MIN_AMOUNT, MAX_AMOUNT),
             timing_looseness=_clamp(self.timing_looseness, MIN_AMOUNT, MAX_AMOUNT),
+            hard_cut_amount=_clamp(self.hard_cut_amount, MIN_AMOUNT, MAX_AMOUNT),
+            section_blend=_clamp(
+                self.section_blend, MIN_BLEND_SECONDS, MAX_BLEND_SECONDS
+            ),
         )
