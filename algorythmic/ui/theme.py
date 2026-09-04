@@ -46,6 +46,74 @@ QGroupBox::title {{
 QLabel[role="subtitle"] {{
     color: {TEXT_MUTED};
 }}
+QLabel[role="title"] {{
+    font-size: 20px;
+    font-weight: 600;
+}}
+QTabWidget::pane {{
+    background-color: {SURFACE};
+    border: 1px solid {BORDER};
+    border-radius: 8px;
+    top: -1px;
+}}
+QTabBar::tab {{
+    background-color: transparent;
+    color: {TEXT_MUTED};
+    border: 1px solid transparent;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    padding: 7px 18px;
+    margin-right: 2px;
+}}
+QTabBar::tab:selected {{
+    background-color: {SURFACE};
+    border-color: {BORDER};
+    border-bottom-color: {SURFACE};
+    color: {TEXT};
+}}
+QTabBar::tab:hover {{
+    color: {TEXT};
+}}
+QFrame[role="card"] {{
+    background-color: {SURFACE_RAISED};
+    border: 1px solid {BORDER};
+    border-radius: 6px;
+    padding: 4px;
+}}
+QCheckBox {{
+    spacing: 8px;
+}}
+QCheckBox::indicator {{
+    width: 14px;
+    height: 14px;
+    border: 1px solid {BORDER};
+    border-radius: 4px;
+    background-color: {SURFACE_RAISED};
+}}
+QCheckBox::indicator:checked {{
+    background-color: {ACCENT};
+    border-color: {ACCENT};
+}}
+QScrollArea {{
+    background-color: transparent;
+    border: none;
+}}
+QScrollBar:vertical {{
+    background: transparent;
+    width: 10px;
+    margin: 0;
+}}
+QScrollBar::handle:vertical {{
+    background: {BORDER};
+    border-radius: 5px;
+    min-height: 24px;
+}}
+QScrollBar::handle:vertical:hover {{
+    background: {TEXT_MUTED};
+}}
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {{
+    height: 0;
+}}
 QLabel[role="value"] {{
     color: {ACCENT};
     font-variant-numeric: tabular-nums;

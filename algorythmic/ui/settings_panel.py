@@ -25,10 +25,12 @@ from PySide6.QtWidgets import (
 
 from ..config.track_settings import (
     MAX_AMOUNT,
+    MAX_BLEND_SECONDS,
     MAX_BPM,
     MAX_SEED,
     MAX_TONIC_MIDI,
     MIN_AMOUNT,
+    MIN_BLEND_SECONDS,
     MIN_BPM,
     MIN_SEED,
     MIN_TONIC_MIDI,
@@ -36,6 +38,7 @@ from ..config.track_settings import (
 )
 from ..model.arrangement import STRUCTURE_LABELS
 from ..model.scale import MODE_LABELS, note_label
+from ..synthesis.parameters import Parameter
 from ..texts import (
     BUTTON_BROWSE,
     BUTTON_RANDOM_SEED,
@@ -44,22 +47,30 @@ from ..texts import (
     GROUP_COMPOSITION,
     GROUP_OUTPUT,
     GROUP_TEXTURE,
+    GROUP_TRANSITIONS,
+    LABEL_HARD_CUT,
     LABEL_LOOSENESS,
     LABEL_MODE,
     LABEL_OUTPUT_FILE,
     LABEL_REVERB,
     LABEL_SEED,
+    LABEL_SECTION_BLEND,
     LABEL_SPECTRAL_TILT,
     LABEL_STEREO_WIDTH,
     LABEL_STRUCTURE,
     LABEL_TEMPO,
     LABEL_TONIC,
+    SECONDS_SUFFIX,
     TEMPO_SUFFIX,
 )
+from .parameter_slider import ParameterSlider
 from .ratio_slider import RatioSlider
 
 TEMPO_STEP = 0.5
 TEMPO_DECIMALS = 1
+SECTION_BLEND = Parameter("section_blend", LABEL_SECTION_BLEND,
+                          MIN_BLEND_SECONDS, MAX_BLEND_SECONDS, 0.9,
+                          SECONDS_SUFFIX)
 
 
 class SettingsPanel(QWidget):
@@ -83,12 +94,17 @@ class SettingsPanel(QWidget):
         self._looseness = RatioSlider(
             MIN_AMOUNT, MAX_AMOUNT, defaults.timing_looseness
         )
+        self._hard_cut = RatioSlider(MIN_AMOUNT, MAX_AMOUNT, defaults.hard_cut_amount)
+        self._section_blend = ParameterSlider(
+            SECTION_BLEND, defaults.section_blend, self
+        )
         self._output_path = QLineEdit(str(defaults.output_path.resolve()), self)
 
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self._build_composition_group())
         layout.addWidget(self._build_texture_group())
+        layout.addWidget(self._build_transitions_group())
         layout.addWidget(self._build_output_group())
         layout.addStretch()
 
@@ -104,6 +120,8 @@ class SettingsPanel(QWidget):
             reverb_amount=self._reverb.value(),
             stereo_width=self._stereo_width.value(),
             timing_looseness=self._looseness.value(),
+            hard_cut_amount=self._hard_cut.value(),
+            section_blend=self._section_blend.value(),
             output_path=Path(self._output_path.text()),
         ).clamped()
 
@@ -165,6 +183,13 @@ class SettingsPanel(QWidget):
         form.addRow(LABEL_REVERB, self._reverb)
         form.addRow(LABEL_STEREO_WIDTH, self._stereo_width)
         form.addRow(LABEL_LOOSENESS, self._looseness)
+        return group
+
+    def _build_transitions_group(self) -> QGroupBox:
+        group = QGroupBox(GROUP_TRANSITIONS, self)
+        form = QFormLayout(group)
+        form.addRow(LABEL_HARD_CUT, self._hard_cut)
+        form.addRow(self._section_blend)
         return group
 
     def _build_output_group(self) -> QGroupBox:

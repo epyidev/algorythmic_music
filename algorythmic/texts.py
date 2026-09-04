@@ -50,6 +50,7 @@ STATUS_CANCELLED = "Rendu annulé."
 STAGE_LABELS = {
     RenderStage.PREPARING: "Préparation de la grille",
     RenderStage.LAYERS: "Synthèse des couches",
+    RenderStage.EFFECTS: "Chaînes d'effets",
     RenderStage.AUTOMATION: "Automation de mixage",
     RenderStage.REVERB: "Réverbération",
     RenderStage.SPECTRAL_TILT: "Basculement spectral",
@@ -75,3 +76,37 @@ CLI_HELP_MODE = "mode de la gamme"
 CLI_HELP_TEMPO = "tempo en battements par minute"
 CLI_HELP_STRUCTURE = "structure du morceau"
 CLI_PROGRESS = "[{percent:3d} %] {stage}"
+
+TAB_COMPOSITION = "Composition"
+TAB_INSTRUMENTS = "Instruments"
+
+GROUP_TRANSITIONS = "Enchaînement"
+LABEL_HARD_CUT = "Coupes franches"
+LABEL_SECTION_BLEND = "Fondu entre sections"
+SECONDS_SUFFIX = " s"
+
+LABEL_LAYER = "Couche"
+LABEL_LAYER_ENABLED = "Couche active"
+LABEL_LAYER_GAIN = "Niveau"
+LABEL_TIMBRE = "Timbre"
+LABEL_BRIGHTNESS = "Brillance"
+LABEL_DETUNE = "Désaccord"
+LABEL_ATTACK = "Attaque"
+LABEL_CHARACTER = "Caractère"
+
+GROUP_VOICE = "Voix"
+GROUP_EFFECTS = "Chaîne d'effets"
+BUTTON_ADD_EFFECT = "Ajouter"
+BUTTON_REMOVE_EFFECT = "Retirer"
+BUTTON_MOVE_UP = "Monter"
+BUTTON_MOVE_DOWN = "Descendre"
+EFFECTS_EMPTY = "Aucun effet sur cette couche."
+DRUMS_WITHOUT_TIMBRE = "Les percussions ont leur propre synthèse, sans timbre à choisir."
+
+BUTTON_PREVIEW = "Préécouter"
+BUTTON_PREVIEW_STOP = "Arrêter la préécoute"
+STATUS_PREVIEW_RENDERING = "Préparation de la préécoute."
+STATUS_PREVIEW_PLAYING = "Préécoute en boucle."
+LOG_PREVIEW_READY = "Préécoute prête, {seconds:.1f} s jouées en boucle."
+LOG_PREVIEW_STOPPED = "Préécoute arrêtée."
+LOG_NO_AUDIO_DEVICE = "Aucune sortie audio disponible sur ce poste."
