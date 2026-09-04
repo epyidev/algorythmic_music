@@ -1,8 +1,8 @@
 """
 Grille temporelle : où commence chaque section et où tombe chaque accord.
 
-Les coupes franches sont un silence numérique inséré avant une section. Elles
-sont le seul moment du morceau où le son s'arrête net.
+Les coupes franches sont un silence numérique inséré avant une section. Leur
+durée est dosable, jusqu'à zéro pour un enchaînement continu.
 
 @author epyidev
 """
@@ -46,22 +46,30 @@ class Timeline:
     events: tuple[ChordEvent, ...]
     spans: tuple[SectionSpan, ...]
     duration: float
+    slot_duration: float
 
 
 def build_timeline(
-    settings: TrackSettings, progression: tuple[Chord, ...]
+    settings: TrackSettings,
+    progression: tuple[Chord, ...],
+    sections: tuple[Section, ...] | None = None,
+    lead_in: float = LEAD_IN_SILENCE,
+    tail: float = TAIL_SILENCE,
 ) -> Timeline:
     """Déroule la structure et place chaque accord sur l'axe du temps."""
+    if sections is None:
+        sections = structure_sections(settings.structure_name)
+
     beat = settings.beat_duration
     cell_duration = BEATS_PER_CELL * beat
     slot_duration = cell_duration / len(progression)
 
     events: list[ChordEvent] = []
     spans: list[SectionSpan] = []
-    cursor = LEAD_IN_SILENCE
+    cursor = lead_in
 
-    for section in structure_sections(settings.structure_name):
-        cursor += section.lead_silence
+    for section in sections:
+        cursor += section.lead_silence * settings.hard_cut_amount
         section_start = cursor
 
         for cell_index in range(section.cell_count):
@@ -81,5 +89,6 @@ def build_timeline(
     return Timeline(
         events=tuple(events),
         spans=tuple(spans),
-        duration=cursor + TAIL_SILENCE,
+        duration=cursor + tail,
+        slot_duration=slot_duration,
     )
