@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from ...synthesis.voice import VoiceSpec, render_voice
+from ...synthesis.voices import VoiceSpec, render_voice
 from ..placement import place_signal
 from ..timeline import ChordEvent
 from .context import PartContext
@@ -76,6 +76,7 @@ class OstinatoPart:
                     rng,
                     OSTINATO_SPEC,
                     context.sample_rate,
+                    context.layer.timbre,
                 ) * amplitude,
                 event.start_time + step * step_duration + context.timing.offset(rng),
                 context.sample_rate,

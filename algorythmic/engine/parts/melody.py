@@ -14,7 +14,7 @@ import numpy as np
 
 from ...model.progression import dominant_root
 from ...model.scale import SEMITONES_PER_OCTAVE
-from ...synthesis.voice import VoiceSpec, render_voice
+from ...synthesis.voices import VoiceSpec, render_voice
 from ..placement import place_signal
 from ..timeline import ChordEvent
 from .context import PartContext
@@ -77,6 +77,7 @@ class MelodyPart:
                 rng,
                 MELODY_SPEC,
                 context.sample_rate,
+                context.layer.timbre,
             ) * MELODY_AMPLITUDE,
             event.start_time + context.timing.offset(rng),
             context.sample_rate,

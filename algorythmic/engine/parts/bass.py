@@ -9,7 +9,7 @@ from __future__ import annotations
 import numpy as np
 
 from ...model.scale import SEMITONES_PER_OCTAVE
-from ...synthesis.voice import VoiceSpec, render_voice
+from ...synthesis.voices import VoiceSpec, render_voice
 from ..placement import place_signal
 from ..timeline import ChordEvent
 from .context import PartContext
@@ -39,7 +39,8 @@ class BassPart:
         duration = context.slot_duration + BASS_TAIL
         place_signal(
             buffer,
-            render_voice(midi, duration, rng, BASS_SPEC, context.sample_rate)
+            render_voice(midi, duration, rng, BASS_SPEC, context.sample_rate,
+                         context.layer.timbre)
             * BASS_AMPLITUDE,
             event.start_time + context.timing.offset(rng),
             context.sample_rate,

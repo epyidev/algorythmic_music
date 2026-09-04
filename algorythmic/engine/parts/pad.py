@@ -12,7 +12,7 @@ from __future__ import annotations
 import numpy as np
 
 from ...model.scale import SEMITONES_PER_OCTAVE
-from ...synthesis.voice import VoiceSpec, render_voice
+from ...synthesis.voices import VoiceSpec, render_voice
 from ..placement import place_signal
 from ..timeline import ChordEvent
 from .context import PartContext
@@ -45,7 +45,8 @@ class PadPart:
             offset = context.timing.offset(rng, PAD_JITTER_SCALE)
             place_signal(
                 buffer,
-                render_voice(midi, duration, rng, PAD_SPEC, context.sample_rate)
+                render_voice(midi, duration, rng, PAD_SPEC, context.sample_rate,
+                             context.layer.timbre)
                 * amplitude,
                 event.start_time + offset,
                 context.sample_rate,

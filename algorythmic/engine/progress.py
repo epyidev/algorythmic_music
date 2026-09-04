@@ -21,6 +21,7 @@ class RenderStage(Enum):
 
     PREPARING = "preparing"
     LAYERS = "layers"
+    EFFECTS = "effects"
     AUTOMATION = "automation"
     REVERB = "reverb"
     SPECTRAL_TILT = "spectral_tilt"

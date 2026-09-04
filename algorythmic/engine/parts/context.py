@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from ...config.layer_settings import LayerSettings
 from ...model.timing import Timing
 
 
@@ -20,3 +21,4 @@ class PartContext:
     tonic_midi: int
     mode_name: str
     slot_duration: float
+    layer: LayerSettings
